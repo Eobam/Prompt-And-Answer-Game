@@ -11,7 +11,6 @@ commands_on = True
 def open_inventory():
     print("Inventory opened")
 if commands_on == True:
-    current_command = "blank"
     if current_command == "attack_e":
         global attack_enemy
         attack_enemy = True
