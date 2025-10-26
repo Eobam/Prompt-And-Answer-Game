@@ -1,5 +1,7 @@
 import inspect
 import time
+import threading
+
 
 #Player attributes
 
@@ -26,7 +28,7 @@ class Enemy:
         self.attack_speed = attack_speed
     def take_damage(self, damage_amount):
         self.health -= damage_amount
-        damage_amount = damage_am
+        print(f"Enemy health is now {self.health}")
 
 tutorial_zombie = Enemy(30, 5, 5)
 fists = Weapon(5, 5)
@@ -81,6 +83,21 @@ if commands_on == True:
     else:
         current_command = input("Invalid input, please restate what you would like to do.") 
 
+health_more_than = True
+
+
+def enemy_attack(damage_amount, attack_speed, health):
+    global p_health
+
+    print("You got attacked!")
+    if health > 0 and p_health > 0:
+         p_health -= damage_amount
+         if p_health > 0:
+            threading.Timer(attack_speed, enemy_attack, [damage_amount, attack_speed, health]).start()
+            print(f"Your health is now {p_health}")
+            if health > 0:
+                current_command = input("Make your move!")
+
 print("Ok, so you can look at what you have, let's see if you can take away what someone else has (their health)")
 time.sleep(0.6)
 print("Let's redo this scene")
@@ -88,8 +105,9 @@ time.sleep(0.6)
 print(f"You're still in Dessert-Town, but now, there's a zombie, runnning at you, in your hands, you have nothing, just your fists, and neither does the zombie. ~You now have fists in your inventory and they are equipped the zombie has {tutorial_zombie.health} health~") #Use .sleep to create a timed scene, add fists to inventory.
 time.sleep(1.0)
 print(f"You have {tutorial_zombie.attack_speed} seconds before it attacks you, try and attack it with attack_e! btw you have {p_health} health and the fists do {fists.damage} damage")
+enemy_attack(tutorial_zombie.damage, tutorial_zombie.attack_speed, tutorial_zombie.health)
 current_command = input("Alright, make your move!")
-print(Enemy.health)
+print(tutorial_zombie.health)
 print(f"DEBUG:{current_command}")
 
 if current_command == "e" or current_command == "attack_e":
@@ -97,5 +115,29 @@ if current_command == "e" or current_command == "attack_e":
 else:
     current_command = input("Invalid input, please restate what you would like to do.") 
 
+if commands_on == True:
+    if current_command == "attack_e":
+        attack_enemy = True
+        tutorial_zombie.take_damage(fists.damage)
+        print(f"Enemy attacked their health is now {tutorial_zombie.health}")
+    if current_command == "e":
+        open_inventory()
 
+print(f"DEBUG:{current_command}")
+print(tutorial_zombie.health)
 
+print("Nice job! Now quick, attack again before it hits you!")
+while tutorial_zombie.health > 0 and p_health > 0: 
+    current_command = input("Make your move:")
+    if current_command == "e" or current_command == "attack_e":
+        pass
+    else:
+        current_command = input("Invalid input, please restate what you would like to do.") 
+
+    if commands_on == True:
+        if current_command == "attack_e":
+            attack_enemy = True
+            tutorial_zombie.take_damage(fists.damage)
+            print("Enemy attacked")
+        if current_command == "e":
+            open_inventory()
