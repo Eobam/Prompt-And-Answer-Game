@@ -1,6 +1,7 @@
 import inspect
 import time
 import threading
+import random
 
 
 #Player attributes
@@ -83,20 +84,27 @@ if commands_on == True:
     else:
         current_command = input("Invalid input, please restate what you would like to do.") 
 
-health_more_than = True
+e_p_alive = True
 
 
 def enemy_attack(damage_amount, attack_speed, health):
-    global p_health
+    global p_health, e_p_alive
 
+    if not e_p_alive:
+        return
+    
+
+    if health <= 0 or p_health <= 0:
+        e_p_alive = False
+        print("DEBUG: health of player or zombie is 0")
+        return
+    
+    if e_p_alive == True:
+        p_health -= damage_amount
+        health = health
+        threading.Timer(attack_speed, enemy_attack, [damage_amount, attack_speed, health]).start()
     print("You got attacked!")
-    if health > 0 and p_health > 0:
-         p_health -= damage_amount
-         if p_health > 0:
-            threading.Timer(attack_speed, enemy_attack, [damage_amount, attack_speed, health]).start()
-            print(f"Your health is now {p_health}")
-            if health > 0:
-                current_command = input("Make your move!")
+    print(f"Your health is now {p_health}")
 
 print("Ok, so you can look at what you have, let's see if you can take away what someone else has (their health)")
 time.sleep(0.6)
@@ -126,6 +134,9 @@ if commands_on == True:
 print(f"DEBUG:{current_command}")
 print(tutorial_zombie.health)
 
+if tutorial_zombie.health <= 0:
+    e_p_alive = False
+
 print("Nice job! Now quick, attack again before it hits you!")
 while tutorial_zombie.health > 0 and p_health > 0: 
     current_command = input("Make your move:")
@@ -141,3 +152,31 @@ while tutorial_zombie.health > 0 and p_health > 0:
             print("Enemy attacked")
         if current_command == "e":
             open_inventory()
+
+
+if tutorial_zombie.health <= 0:
+    print("Nice job! Now that you've got the fighting aspect down, let's explore a bit!")
+
+class Item:
+    def __init__(self, rarity, ):
+        pass
+
+
+print("Ok, so you're looking at this dead zombie, you see something in what seemed to be it's jean pocket, if you want to pick it up, put your input as: search ")
+
+current_command = input("What do you want to do?")
+
+if current_command == "e" or current_command == "attack_e":
+        pass
+else:
+        current_command = input("Invalid input, please restate what you would like to do.") 
+
+if commands_on == True:
+    if current_command == "attack_e":
+            attack_enemy = True
+            tutorial_zombie.take_damage(fists.damage)
+            print("Enemy attacked")
+    if current_command == "e":
+            open_inventory()
+    if current_command == "search":
+        pass
