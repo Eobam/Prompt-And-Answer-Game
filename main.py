@@ -87,10 +87,14 @@ if commands_on == True:
 e_p_alive = True
 
 
+testing_testing123 = False
+
 def enemy_attack(damage_amount, attack_speed, health):
     global p_health, e_p_alive
 
     if not e_p_alive:
+        global testing_testing123
+        testing_testing123 = True
         return
     
 
@@ -99,7 +103,7 @@ def enemy_attack(damage_amount, attack_speed, health):
         print("DEBUG: health of player or zombie is 0")
         return
     
-    if e_p_alive == True:
+    if testing_testing123 == False:
         p_health -= damage_amount
         health = health
         threading.Timer(attack_speed, enemy_attack, [damage_amount, attack_speed, health]).start()
@@ -158,7 +162,7 @@ if tutorial_zombie.health <= 0:
     print("Nice job! Now that you've got the fighting aspect down, let's explore a bit!")
 
 class Item:
-    def __init__(self, rarity, ):
+    def __init__(self, rarity, healing, heal_amount, damage ):
         pass
 
 
