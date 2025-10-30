@@ -15,6 +15,32 @@ p_speed = 20
 
 damage_am = int((0))
 
+BLANK = False
+
+class Item:
+    def __init__(self, rarity, healing, heal_amount, damage, pull_count ):
+        self.rarity = rarity
+        self.healing = healing
+        self.heal_amount = heal_amount
+        self.damage = damage
+        self.pull_count = pull_count
+
+
+        if BLANK == True:
+            damage = damage_am
+
+        def heal():
+            if healing == True:
+                global p_health
+                p_health = heal_amount + p_health
+                if p_health > 100:
+                    global p_health
+                    p_health = p_health - (p_health - 100) 
+
+
+        def display_rarity():
+            print(f"Woah you got a {Item} the rarity is {rarity}")
+
 class Weapon:
     def __init__(self, damage, attack_speed):
         self.damage = damage
@@ -122,6 +148,23 @@ current_command = input("Alright, make your move!")
 print(tutorial_zombie.health)
 print(f"DEBUG:{current_command}")
 
+
+pulled_item = "blank"
+
+def item_list(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,):
+    item_list = [item1, item2, item3, item4, item6, item7, item8, item9, item10]
+    pulled_item = random.item_list
+    while pulled_item == "blank":
+        pulled_item = random.item_list
+        if pulled_item != "blank":
+            break
+    if pulled_item == Item.rarity("uncommon"):
+        Item.pull_count += 1
+        pulled_item = random.item_list
+        if Item.rarity("uncommon") and Item.pull_count == 2:
+            return pulled_item
+        
+
 if current_command == "e" or current_command == "attack_e":
     pass
 else:
@@ -161,9 +204,6 @@ while tutorial_zombie.health > 0 and p_health > 0:
 if tutorial_zombie.health <= 0:
     print("Nice job! Now that you've got the fighting aspect down, let's explore a bit!")
 
-class Item:
-    def __init__(self, rarity, healing, heal_amount, damage ):
-        pass
 
 
 print("Ok, so you're looking at this dead zombie, you see something in what seemed to be it's jean pocket, if you want to pick it up, put your input as: search ")
@@ -175,12 +215,23 @@ if current_command == "e" or current_command == "attack_e":
 else:
         current_command = input("Invalid input, please restate what you would like to do.") 
 
+
+Basic_Bandage = Item("Common", True, 10, 0, 0)
+
+Stick = Item("Common", False, 0, 3, 0)
+
+
+
+item_list(Basic_Bandage, )
+
 if commands_on == True:
     if current_command == "attack_e":
             attack_enemy = True
             tutorial_zombie.take_damage(fists.damage)
             print("Enemy attacked")
     if current_command == "e":
-            open_inventory()
+            
+      open_inventory()
     if current_command == "search":
-        pass
+        print(f"You got a {pulled_item}")
+
