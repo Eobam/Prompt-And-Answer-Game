@@ -11,8 +11,6 @@ p_health = 100
 p_speed = 20
 
 
-
-
 damage_am = int((0))
 
 BLANK = False
@@ -26,20 +24,16 @@ class Item:
         self.pull_count = pull_count
 
 
-        if BLANK == True:
-            damage = damage_am
-
-        def heal():
-            if healing == True:
-                global p_health
-                p_health = heal_amount + p_health
-                if p_health > 100:
-                    global p_health
-                    p_health = p_health - (p_health - 100) 
 
 
-        def display_rarity():
-            print(f"Woah you got a {Item} the rarity is {rarity}")
+    def heal(self):
+        global p_health
+        if self.healing:
+            global p_health
+            p_health = self.heal_amount + p_health
+            if p_health > 100:
+                p_health = p_health - (p_health - 100) 
+
 
 class Weapon:
     def __init__(self, damage, attack_speed):
@@ -155,13 +149,13 @@ def item_list(item1, item2, item3, item4, item5, item6, item7, item8, item9, ite
     item_list = [item1, item2, item3, item4, item6, item7, item8, item9, item10]
     pulled_item = random.item_list
     while pulled_item == "blank":
-        pulled_item = random.item_list
+        pulled_item = random.choice(item_list)
         if pulled_item != "blank":
             break
-    if pulled_item == Item.rarity("uncommon"):
+    if pulled_item == Item.rarity("Uncommon"):
         Item.pull_count += 1
         pulled_item = random.item_list
-        if Item.rarity("uncommon") and Item.pull_count == 2:
+        if Item.rarity("Uncommon") and Item.pull_count == 2:
             return pulled_item
         
 
@@ -220,9 +214,11 @@ Basic_Bandage = Item("Common", True, 10, 0, 0)
 
 Stick = Item("Common", False, 0, 3, 0)
 
+Grandmas_Sword = Item("Uncommon", False, 0, 6, 0)
 
 
-item_list(Basic_Bandage, )
+
+item_list(Basic_Bandage, Stick, Grandmas_Sword, "blank", "blank", "blank", "blank", "blank", "blank", "blank")
 
 if commands_on == True:
     if current_command == "attack_e":
@@ -234,4 +230,6 @@ if commands_on == True:
       open_inventory()
     if current_command == "search":
         print(f"You got a {pulled_item}")
+
+print("Nice! Now check your inventory to look at your new item!")
 
