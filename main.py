@@ -2,6 +2,7 @@ import inspect
 import time
 import threading
 import random
+import time2 as t
 
 
 #Player attributes
@@ -27,9 +28,9 @@ class Item:
 
 
     def heal(self):
-        global p_health
+        p_health
         if self.healing:
-            global p_health
+            p_health
             p_health = self.heal_amount + p_health
             if p_health > 100:
                 p_health = p_health - (p_health - 100) 
@@ -43,7 +44,8 @@ class Weapon:
 
 
 class Enemy:
-    def __init__(self, health, damage, attack_speed):
+    def __init__(self, health, damage, attack_speed, last_attack):
+        self.last_attack = time.time()
         self.health = health
         self.damage = damage
         self.attack_speed = attack_speed
@@ -51,7 +53,7 @@ class Enemy:
         self.health -= damage_amount
         print(f"Enemy health is now {self.health}")
 
-tutorial_zombie = Enemy(30, 5, 5)
+tutorial_zombie = Enemy(30, 5, 5, time.time())
 fists = Weapon(5, 5)
 #Beginning intro
 name = input("What's your name?")
@@ -104,31 +106,26 @@ if commands_on == True:
     else:
         current_command = input("Invalid input, please restate what you would like to do.") 
 
-e_p_alive = True
 
 
-testing_testing123 = False
 
-def enemy_attack(damage_amount, attack_speed, health):
-    global p_health, e_p_alive
-
-    if not e_p_alive:
-        global testing_testing123
-        testing_testing123 = True
-        return
-    
+def enemy_attack(enemy, damage_amount, attack_speed, health):
+    global p_health
 
     if health <= 0 or p_health <= 0:
-        e_p_alive = False
         print("DEBUG: health of player or zombie is 0")
-        return
+        return p_health
     
-    if testing_testing123 == False:
-        p_health -= damage_amount
-        health = health
-        threading.Timer(attack_speed, enemy_attack, [damage_amount, attack_speed, health]).start()
+    while p_health > 0 and health > 0:
+        if (time.time() - enemy.last_attack) >= attack_speed:
+            p_health -= damage_amount
+            enemy.last_attack = time.time()
+
     print("You got attacked!")
     print(f"Your health is now {p_health}")
+    return p_health
+
+
 
 print("Ok, so you can look at what you have, let's see if you can take away what someone else has (their health)")
 time.sleep(0.6)
@@ -137,8 +134,9 @@ time.sleep(0.6)
 print(f"You're still in Dessert-Town, but now, there's a zombie, runnning at you, in your hands, you have nothing, just your fists, and neither does the zombie. ~You now have fists in your inventory and they are equipped the zombie has {tutorial_zombie.health} health~") #Use .sleep to create a timed scene, add fists to inventory.
 time.sleep(1.0)
 print(f"You have {tutorial_zombie.attack_speed} seconds before it attacks you, try and attack it with attack_e! btw you have {p_health} health and the fists do {fists.damage} damage")
-enemy_attack(tutorial_zombie.damage, tutorial_zombie.attack_speed, tutorial_zombie.health)
+
 current_command = input("Alright, make your move!")
+enemy_attack(tutorial_zombie, tutorial_zombie.damage, tutorial_zombie.attack_speed, tutorial_zombie.health)
 print(tutorial_zombie.health)
 print(f"DEBUG:{current_command}")
 
@@ -147,13 +145,24 @@ pulled_item = "blank"
 
 def item_list(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,):
     item_list = [item1, item2, item3, item4, item6, item7, item8, item9, item10]
-    pulled_item = random.item_list
+    reitem1 = item1
+    reitem2 = item2
+    reitem3 = item3
+    reitem4 = item4
+    reitem5 = item5
+    reitem6 = item6
+    reitem7 = item7
+    reitem8 = item8
+    reitem9 = item9
+    reitem10 = item10
+
+    pulled_item = random.choice(item1, item2, item3, item4, item6, item7, item8, item9, item10)
     while pulled_item == "blank":
-        pulled_item = random.choice(item_list)
+        pulled_item = random.choice(item1, item2, item3, item4, item6, item7, item8, item9, item10)
         if pulled_item != "blank":
-            break
-    if pulled_item == Item.rarity("Uncommon"):
-        Item.pull_count += 1
+            item_list(reitem1, reitem2, reitem3, reitem4, reitem5, reitem6, reitem7, reitem8, reitem9, reitem10)
+    if pulled_item.rarity == ("Uncommon"):
+        pulled_item.pull_count += 1
         pulled_item = random.item_list
         if Item.rarity("Uncommon") and Item.pull_count == 2:
             return pulled_item
